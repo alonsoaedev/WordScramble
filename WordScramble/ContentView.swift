@@ -58,6 +58,22 @@ struct ContentView: View {
             return
         }
         
+        guard isLarge(word: answer) else {
+            wordError(
+                title: "Word too short",
+                message: "You can't use a word of one or two characters!!"
+            )
+            return
+        }
+        
+        guard isDiffStartedWord(word: answer) else {
+            wordError(
+                title: "Started word",
+                message: "You can't use the started word, don't be silly!!"
+            )
+            return
+        }
+        
         withAnimation {
             usedWords.insert(answer, at: 0)
         }
@@ -92,6 +108,14 @@ struct ContentView: View {
             language: "en"
         )
         return misspelledRange.location == NSNotFound
+    }
+    
+    func isLarge(word: String) -> Bool {
+        word.count >= 3
+    }
+    
+    func isDiffStartedWord(word: String) -> Bool {
+        word != rootWord
     }
     
     func wordError(title: String, message: String) {
