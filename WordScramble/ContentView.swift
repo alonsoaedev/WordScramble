@@ -16,12 +16,15 @@ struct ContentView: View {
     @State private var errorMessage = ""
     @State private var showError = false
     
+    @State private var score = 0
+    
     func startGame() {
         if let startWordURL = Bundle.main.url(forResource: "start", withExtension: "txt") {
             if let startWords = try? String(contentsOf: startWordURL) {
                 let allWords = startWords.components(separatedBy: "\n")
                 rootWord = allWords.randomElement() ?? "silkworm"
                 usedWords.removeAll()
+                score = 0
                 return
             }
         }
@@ -40,6 +43,7 @@ struct ContentView: View {
                 title: "Word used already",
                 message: "Be more original!!"
             )
+            score -= 1
             return
         }
         
@@ -48,6 +52,7 @@ struct ContentView: View {
                 title: "Word not possible",
                 message: "You can't spell that word from '\(rootWord)'!!"
             )
+            score -= 1
             return
         }
         
@@ -56,6 +61,7 @@ struct ContentView: View {
                 title: "Word not recognized",
                 message: "You can't just make them up, you know!!"
             )
+            score -= 1
             return
         }
         
@@ -64,6 +70,7 @@ struct ContentView: View {
                 title: "Word too short",
                 message: "You can't use a word of one or two characters!!"
             )
+            score -= 1
             return
         }
         
@@ -72,6 +79,7 @@ struct ContentView: View {
                 title: "Started word",
                 message: "You can't use the started word, don't be silly!!"
             )
+            score -= 1
             return
         }
         
@@ -79,6 +87,7 @@ struct ContentView: View {
             usedWords.insert(answer, at: 0)
         }
         newWord = ""
+        score += 1 + answer.count
     }
     
     func isOriginal(word: String) -> Bool {
@@ -154,6 +163,8 @@ struct ContentView: View {
                 Button("New Game", action: startGame)
             }
         }
+        Text("Score: \(score)")
+            .font(.largeTitle)
     }
 }
 
