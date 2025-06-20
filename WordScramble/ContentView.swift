@@ -21,6 +21,7 @@ struct ContentView: View {
             if let startWords = try? String(contentsOf: startWordURL) {
                 let allWords = startWords.components(separatedBy: "\n")
                 rootWord = allWords.randomElement() ?? "silkworm"
+                usedWords.removeAll()
                 return
             }
         }
@@ -148,6 +149,9 @@ struct ContentView: View {
                 Button("OK") {  }
             } message: {
                 Text(errorMessage)
+            }
+            .toolbar {
+                Button("New Game", action: startGame)
             }
         }
     }
